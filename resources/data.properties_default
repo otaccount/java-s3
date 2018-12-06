@@ -1,1 +1,6 @@
-key=
+proxyHost=
+proxyPort=
+accessKey=
+secretKey=
+serviceEndpoint=
+signingRegion=

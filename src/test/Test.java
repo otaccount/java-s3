@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
@@ -15,8 +18,11 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ListObjectsV2Request;
+import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.util.IOUtils;
 
 import cls.Prop;
@@ -29,12 +35,26 @@ public class Test extends Basic {
 		// TODO 自動生成されたメソッド・スタブ
 		out("start");
 
-		test02();
-//		test01();
+		test03();
 
 		out("end");
 	}
 
+	// 一覧取得には
+	public static void test03() {
+		try {
+			val aws = new AwsFile();
+			val list = aws.list("fol");
+			
+			Arrays.asList(list).stream()
+				.forEach(Basic::out);
+			
+		}catch(Exception e) {
+			out(e);
+		}
+		
+	}
+	
 	public static void test02() {
 		try {
 			val aws = new AwsFile();
@@ -104,6 +124,31 @@ class AwsFile extends Basic{
 		// アップロード処理
 		val putRequest = new PutObjectRequest(BUCKETNAME, path, bais, om);
 		client.putObject(putRequest);
+	}
+	
+	/**
+	 * ﾌｧｲﾙ一覧取得
+	 *
+	 * @param startsWith	ﾊﾟｽの前方一致
+	 * @param hsession		ｾｯｼｮﾝ
+	 * @return				ﾌｧｲﾙﾊﾟｽ一覧
+	 */
+	public String[] list(String startsWith) {
+		// 認証
+		List<String> rtnList = new ArrayList<String>();
+
+		ListObjectsV2Request request = new ListObjectsV2Request()
+				.withBucketName(BUCKETNAME)
+				.withPrefix(startsWith);
+		ListObjectsV2Result list = client.listObjectsV2(request);
+		List<S3ObjectSummary> objects =  list.getObjectSummaries();
+		// 一覧の取得
+		for(S3ObjectSummary obj: objects){
+			// 名称を格納
+			rtnList.add(obj.getKey());
+		}
+		
+		return rtnList.toArray(new String[rtnList.size()]);
 	}
 	
 //	public Map<String, String> getInfo(final String path){

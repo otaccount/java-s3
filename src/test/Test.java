@@ -1,6 +1,7 @@
 package test;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -29,7 +30,9 @@ import cls.Prop;
 import lombok.val;
 import ot.utils.Basic;
 
-public class Test extends Basic {
+import static ot.utils.Basic.*;
+
+public class Test{
 
 	public static void main(String[] args) {
 		// TODO 自動生成されたメソッド・スタブ
@@ -44,7 +47,7 @@ public class Test extends Basic {
 	public static void test03() {
 		try {
 			val aws = new AwsFile();
-			val list = aws.list("fol");
+			val list = aws.list("tempfiles");
 			
 			Arrays.asList(list).stream()
 				.forEach(Basic::out);
@@ -52,9 +55,9 @@ public class Test extends Basic {
 		}catch(Exception e) {
 			out(e);
 		}
-		
 	}
 	
+	// test02
 	public static void test02() {
 		try {
 			val aws = new AwsFile();
@@ -80,7 +83,7 @@ public class Test extends Basic {
 			val file = new File("tmpfiles\\test2.txt");
 			
 			try(val is = new FileInputStream(file)){
-				aws.write(is, file.getName());
+				aws.write(is, "tempfiles/subdir/" + file.getName());
 			}
 		} catch (Exception e) {
 			out(e);
@@ -88,6 +91,8 @@ public class Test extends Basic {
 	}
 }
 
+
+/** AWS S3 操作クラス */
 class AwsFile extends Basic{
 	AmazonS3 client = null;
 	String BUCKETNAME = "s3testot";

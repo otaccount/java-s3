@@ -1,7 +1,6 @@
 package test;
 
 import java.io.ByteArrayInputStream;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -28,19 +27,14 @@ import com.amazonaws.util.IOUtils;
 
 import cls.Prop;
 import lombok.val;
-import ot.utils.Basic;
-
-import static ot.utils.Basic.*;
 
 public class Test{
 
 	public static void main(String[] args) {
 		// TODO 自動生成されたメソッド・スタブ
-		out("start");
 
 		test03();
 
-		out("end");
 	}
 
 	// 一覧取得には
@@ -50,10 +44,10 @@ public class Test{
 			val list = aws.list("tempfiles");
 			
 			Arrays.asList(list).stream()
-				.forEach(Basic::out);
+				.forEach(System.out::println);
 			
 		}catch(Exception e) {
-			out(e);
+			System.out.println(e);
 		}
 	}
 	
@@ -62,17 +56,17 @@ public class Test{
 		try {
 			val aws = new AwsFile();
 			ObjectMetadata om = aws.getInfo("test2.txt");
-//			out(om.getContentLength());
+//			System.out.println(om.getContentLength());
 			
 			val sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			
 			// ｻｲｽﾞ
-			out(om.getContentLength());
+			System.out.println(om.getContentLength());
 			// 最終更新日付
-			out(om.getLastModified());
-			out(sdf.format(om.getLastModified()));
+			System.out.println(om.getLastModified());
+			System.out.println(sdf.format(om.getLastModified()));
 		}catch(Exception e) {
-			out(e);
+			System.out.println(e);
 		}
 		
 	}
@@ -86,14 +80,14 @@ public class Test{
 				aws.write(is, "tempfiles/subdir/" + file.getName());
 			}
 		} catch (Exception e) {
-			out(e);
+			System.out.println(e);
 		}
 	}
 }
 
 
 /** AWS S3 操作クラス */
-class AwsFile extends Basic{
+class AwsFile{
 	AmazonS3 client = null;
 	String BUCKETNAME = "s3testot";
 

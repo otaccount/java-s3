@@ -1,7 +1,5 @@
 package test;
 
-import static ot.utils.Basic.*;
-
 import cls.File;
 
 public class FileTest {
@@ -12,14 +10,10 @@ public class FileTest {
 	}
 
 	public static void test01() {
-		out("start");
 		
 		String path="test.txt";
 		
 		File file = new File(path);
 		
-		out(file.exists());
-		
-		out("end");
 	}
 }
